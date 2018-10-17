@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/', function () {
+    return view('register');
+});
+
+// TODO: Registration in NothStar
+// $router->get('register', 'AuthController@getRegister');
+// $router->post('register', 'AuthController@postRegister');
