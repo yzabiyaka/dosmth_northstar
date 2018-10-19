@@ -1,12 +1,3 @@
-<?php
-/**
- * Created by PhpStorm.
- * Copied from DoSmth/Northstar
- * User: yz
- * Date: 10/17/18
- * Time: 12:24 PM
- */
-
 @extends('layouts.app', ['extended' => true])
 
 @section('title', 'Create Account | DoSomething.org')
@@ -19,7 +10,7 @@
 
     <div class="container__block">
         <ul class="form-actions -inline">
-            <li>@include('auth.facebook')</li>
+           {{-- <li>@include('auth.facebook')</li> --}}
             <li><a href="{{ url('login') }}" class="button">{{ trans('auth.log_in.default') }}</a></li>
         </ul>
         <span class="divider"></span>
@@ -56,7 +47,9 @@
                 <label for="email" class="field-label">{{ trans('auth.fields.email') }}</label>
                 <input name="email" type="text" id="email" class="text-field required js-validate" placeholder="puppet-sloth@example.org" value="{{ old('email') }}" data-validate="email" data-validate-required />
             </div>
-
+            <div>
+                <img class="thething_image" src="{{ asset('sillyimage.png') }}" />
+            </div>
             @if (App::getLocale() === 'en')
                 <div class="form-item">
                     <label for="mobile" class="field-label">{{ trans('auth.fields.mobile') }} <em>{{ trans('auth.validation.optional') }}</em></label>
@@ -74,8 +67,8 @@
                 <input name="password" type="password" id="password" class="text-field required js-validate" placeholder="{{ trans('auth.validation.placeholder.password') }}" data-validate="password" data-validate-required />
                 <span class="password-visibility__toggle -hide"></span>
             </div>
-
-            @if ($voter_reg_status_form === 'voter_form')
+             {{--always render voter info --}}
+            @if ('voter_form' === 'voter_form')
                 <div class="form-item">
                     <label for="voter_registration_status" class="field-label">{{ "Are you registered to vote at your current address?"}}</label>
                     <div class="form-item -reduced">

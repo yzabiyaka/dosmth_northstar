@@ -1,72 +1,62 @@
 <?php
 
+
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
-class RegisterController extends Controller
+class RegisterController
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
     /**
-     * Where to redirect users after registration.
+     * Display the registration form.
      *
-     * @var string
+     * @return \Illuminate\Http\Response
      */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function getRegister()
     {
-        $this->middleware('guest');
+        return view('register');
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * Handle submissions of the registration form.
+     * Validate the form and sends user PII to the RabbitMQ.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param Illuminate\Http\Request $request
+     * @return nothing really. Creates a page making fun of the user.
      */
-    protected function validator(array $data)
+    public function postRegister(Request $request)
     {
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+        $request->validate([
+            'first_name' => 'required|max:50',
+            'birthdate' => 'required|date|before:now',
+            'email' => 'required|email',
+            'mobile' => 'min:11|numeric|nullable',
+            'password' => 'required|min:6|max:512',
         ]);
+
+        // TODO: either this $url = parse_url(getenv('CLOUDAMQP_URL')) or const file.
+        $url = parse_url('amqp://lcwcwqql:v8uI7vRvPPzfvMoHs0YqBt1-zjVyHlJa@rhino.rmq.cloudamqp.com/lcwcwqql');
+        $conn = new AMQPStreamConnection($url['host'], 5672, $url['user'], $url['pass'], $url['user']);
+        $ch = $conn->channel();
+        $exchange = 'amq.direct';
+        // This is clearly a ridiculous hack to get to the existing queue that blink can handle.
+        // Also the queue name should be a contant and defined either as env  var or in a const file.
+        $queue = 'customer-io-campaign-signup';
+        $ch->exchange_declare($exchange, 'direct', true, true, false);
+        $ch->queue_bind($queue, $exchange);
+
+        $msg = new AMQPMessage(json_encode($request->post()),
+                               array('content_type' => 'text/plain',
+                                     'delivery_mode' => 2));
+        echo "And just like that. Your PII will 
+              be avaialbe for all to see at yz_dscodetest@mailinator.com";
+        $ch->basic_publish($msg, $exchange);
+        // TODO: can publish fail? if so, either retry or tell user to come again later
+        // or persist info in some other way.
+        $ch->close();
+        $conn->close();
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-    }
 }

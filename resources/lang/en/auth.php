@@ -1,19 +1,61 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
-
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'greeting' => [
+        'lets_do_this' => 'Let\'s do this!',
+        'continue' => 'Log in to continue to',
+    ],
+    'log_in' => [
+        'default' => 'Log In',
+        'existing' => 'Already have an account? Log in.',
+        'create' => 'Create a DoSomething.org account',
+        'submit' => 'Create New Account',
+        'facebook' => 'Continue with Facebook',
+    ],
+    'get_started' => [
+        'log_in' => 'Log in to get started!',
+        'create_account' => 'Create a DoSomething.org account to get started!',
+        'call_to_action' => 'Join 6 million young people taking action.',
+    ],
+    'validation' => [
+        'issues' => 'Hmm, there were some issues with that submission:',
+        'optional' => '(optional)',
+        'auth' => [
+            'email' => 'Email address is required.',
+        ],
+        'signup' => [
+            'birthday' => 'We need your birthday',
+            'first_name' => 'We need your name',
+            'email' => 'We need a valid email',
+            'password_length' => 'Must be 6+ characters',
+        ],
+        'placeholder' => [
+            'call_you' => 'What do we call you?',
+            'birthday' => 'MM/DD/YYYY',
+            'password' => '6+ characters... make it tricky!',
+            'double_checking' => 'Just double checking!',
+        ],
+    ],
+    'fields' => [
+        'email' => 'Email address',
+        'mobile' => 'Cell Number',
+        'email_or_mobile' => 'Email address or cell number',
+        'first_name' => 'First Name',
+        'birthday' => 'Birthday',
+        'password' => 'Password',
+        'confirm_password' => 'Confirm Password',
+        'new_password' => 'New Password',
+        'confirm_new_password' => 'Confirm New Password',
+    ],
+    'forgot_password' => [
+        'header' => 'Forgot your password?',
+        'instructions' => 'We\'ve all been there. Reset by entering your email.',
+        'request' => 'Request New Password',
+    ],
+    'footnote' => [
+        'create' => 'Creating an account means you agree to our',
+        'terms_of_service' => 'Terms of Service',
+        'privacy_policy' => 'Privacy Policy',
+        'messaging' => 'and to receive our weekly update. Message &amp; data rates may apply. Text STOP to opt-out, HELP for help.',
+    ],
 ];
